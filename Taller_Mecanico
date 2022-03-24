@@ -1,0 +1,106 @@
+Create schema Taller_Mecanico;
+
+USE Taller_Mecanico;
+-- -------------------------------------------------------------------------------------
+
+Drop table Vehiculo;
+
+Create table Vehiculo (
+ID_vehiculo INT not null auto_increment primary key,
+modelo varchar (30),
+marca varchar (30),
+color varchar (15)
+)
+;
+INSERT INTO Vehiculo (Modelo, Marca,Color) VALUES ('chevrolet','Groove','Rojo');
+Select * From Vehiculo;
+
+-- --------------------------------------------------------------------------------------
+
+Drop table Cliente;
+
+Create table Cliente (
+ID_cliente INT not null auto_increment,
+ID_vehiculo INT,
+nombre varchar (30),
+apellido varchar (30),
+contacto INT,
+direccion varchar (30),
+primary key (ID_cliente),
+FOREIGN KEY (ID_vehiculo) REFERENCES Vehiculo (ID_vehiculo)
+)
+;
+INSERT INTO Cliente (nombre, apellido, contacto, direccion) VALUES ('Rick','Hunter','995695351','Av.Indepencia');
+Select * From cliente;
+
+
+
+-- -------------------------------------------------------------------------------------
+
+Create table Falla (
+ID_falla INT not null auto_increment,
+Categoria varchar (30),
+Prioridad varchar (30),
+Fecha_ingreso date,
+Fecha_termino date,
+primary key (ID_falla)
+)
+;
+INSERT INTO Falla (categoria, prioridad, fecha_ingreso, fecha_termino) VALUES ('Frenos','Importante','2019/04/20','2019/04/28');
+Select * From Falla;
+
+-- -------------------------------------------------------------------------------------
+
+Drop table Mecanico;
+
+Create table Mecanico (
+ID_mecanico INT not null auto_increment,
+nombre varchar (30),
+Apellido varchar (30),
+diagnostico text (40),
+solucion text (50),
+primary key (ID_mecanico) 
+)
+;
+
+
+INSERT INTO Mecanico (nombre, apellido, diagnostico, solucion) VALUES ('Max','Vermillon',"Presenta desgaste de frenos ","Se realiza cambio de frenos");
+Select * From Mecanico;
+
+
+-- -------------------------------------------------------------------------------------
+
+Create table Repuesto (
+ID_repuesto INT not null auto_increment,
+Repuesto varchar (30),
+Cantidad INT,
+Proveedor varchar (40),
+fecha_uso date,
+primary key (ID_repuesto) 
+)
+;
+INSERT INTO Repuesto (repuesto, cantidad, proveedor,fecha_uso) VALUES ('Frenos','2','Autopartes sol','2019/04/23');
+Select * From Repuesto;
+
+-- -------------------------------------------------------------------------------------
+
+Drop table Facturacion;
+----
+Creo que es mejor utilizar constraint
+----
+Create table Facturacion (
+ID_facturacion INT not null,
+ID_cliente INT,
+ID_vehiculo INT,
+ID_falla INT,
+ID_mecanico INT,
+ID_repuesto INT,
+fecha_emision date, 
+primary key (ID_vehiculo),
+FOREIGN KEY (ID_cliente) REFERENCES Cliente (ID_cliente),
+FOREIGN KEY (ID_vehiculo) REFERENCES Vehiculo (ID_Vehiculo),
+FOREIGN KEY (ID_falla) REFERENCES falla (ID_falla),
+FOREIGN KEY (ID_mecanico) REFERENCES Mecanico (ID_mecanico),
+FOREIGN KEY (ID_repuesto) REFERENCES Repuesto (ID_repuesto)
+)
+;
