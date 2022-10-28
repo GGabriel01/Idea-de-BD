@@ -1,91 +1,637 @@
-Create schema Taller_Mecanico;
 
-USE Taller_Mecanico;
+/*
+Curso y comisión: SQL – 27810
+Docente: Daniela Blanco
+Tutor: Anderson Ocaña
+Alumno: Gabriel Gutiérrez
 
-
-Create table Vehiculo (
-ID_vehiculo INT not null auto_increment primary key,
-modelo varchar (30),
-marca varchar (30),
-color varchar (15)
-);
-
-Create table Cliente (
-ID_cliente INT not null auto_increment,
-ID_vehiculo INT,
-ID_Falla INT,
-nombre varchar (30),
-apellido varchar (30),
-contacto INT,
-direccion varchar (30),
-primary key (ID_cliente)
-);
-
-
-Create table Falla (
-ID_falla INT not null auto_increment,
-Categoria varchar (30),
-Prioridad varchar (30),  -- En esta parte tengo pensado utilizar la siguiente forma de definir la prioridad (importantes/urgentes, importantes/no urgentes, importantes/urgentes,importantes/no urgentes) Contexto la idea surge de el libro "Los 7 hábitos de la gente altamente efectiva" habito N°3 Poner primero lo primero
-Fecha_ingreso date,
-Fecha_termino date,
-primary key (ID_falla)
-);
-
-Create table Mecanico (
-ID_mecanico INT NOT NULL auto_increment,
-ID_repuesto INT NOT NULL,
-ID_falla INT,
-nombre varchar (30),
-Apellido varchar (30),
-diagnostico text (40),
-solucion text (50),
-primary key (ID_mecanico)
-);
-
-
-Create table Repuesto (
-ID_repuesto INT not null auto_increment,
-Repuesto varchar (30),
-Cantidad INT,
-Proveedor varchar (40),
-fecha_uso date,
-primary key (ID_repuesto) 
-);
-
-
-Create table Facturacion (
-ID_facturacion INT not null,
-ID_cliente INT,
-ID_vehiculo INT,
-ID_falla INT,
-ID_mecanico INT,
-ID_repuesto INT,
-fecha_emision date, 
-Costo_Reparacion INT,
-primary key (ID_facturacion)
-);
+*/
 
 
 
 
--- Alters
 
+CREATE DATABASE  IF NOT EXISTS `taller_mecanico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `taller_mecanico`;
+-- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
+--
+-- Host: localhost    Database: taller_mecanico
+-- ------------------------------------------------------
+-- Server version	8.0.28
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-ALTER TABLE Cliente
-ADD CONSTRAINT FK_Vehiculo_Cliente FOREIGN KEY (ID_vehiculo) REFERENCES Vehiculo (ID_vehiculo),
-ADD CONSTRAINT FK_Cliente_Falla FOREIGN KEY (ID_falla) REFERENCES Falla (ID_falla);
+--
+-- Table structure for table `cliente`
+--
 
-ALTER TABLE Mecanico
-ADD CONSTRAINT FK_repuesto_mecanico FOREIGN KEY (ID_repuesto) REFERENCES Repuesto (ID_repuesto),
-ADD CONSTRAINT FK_mecanico_falla FOREIGN KEY (ID_falla) REFERENCES Falla (ID_falla);
+DROP TABLE IF EXISTS `cliente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cliente` (
+  `ID_cliente` int NOT NULL AUTO_INCREMENT,
+  `ID_vehiculo` int DEFAULT NULL,
+  `ID_Falla` int DEFAULT NULL,
+  `Nombre` varchar(30) DEFAULT NULL,
+  `Apellido` varchar(30) DEFAULT NULL,
+  `Contacto` int DEFAULT NULL,
+  `Direccion` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`ID_cliente`),
+  KEY `FK_Vehiculo_Cliente` (`ID_vehiculo`),
+  KEY `FK_Cliente_Falla` (`ID_Falla`),
+  CONSTRAINT `FK_Cliente_Falla` FOREIGN KEY (`ID_Falla`) REFERENCES `falla` (`ID_falla`),
+  CONSTRAINT `FK_Vehiculo_Cliente` FOREIGN KEY (`ID_vehiculo`) REFERENCES `vehiculo` (`ID_vehiculo`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `cliente`
+--
 
-ALTER TABLE Facturacion 
-ADD CONSTRAINT FK_cliente FOREIGN KEY (ID_cliente) REFERENCES Cliente (ID_cliente), 
-ADD CONSTRAINT FK_vehiculo FOREIGN KEY (ID_vehiculo)REFERENCES Vehiculo (ID_Vehiculo),
-ADD CONSTRAINT FK_falla FOREIGN KEY (ID_falla) REFERENCES falla (ID_falla),
-ADD CONSTRAINT FK_mecanico FOREIGN KEY (ID_mecanico) REFERENCES Mecanico (ID_mecanico),
-ADD CONSTRAINT FK_repuesto FOREIGN KEY (ID_repuesto) REFERENCES Repuesto (ID_repuesto)
-;
+LOCK TABLES `cliente` WRITE;
+/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT INTO `cliente` VALUES (1,1,1,'Gilbertina','Lardez',95558520,'Michigan'),(2,2,2,'June','Sparkes',69478917,'Division'),(3,3,3,'Lynea','Rennison',43288022,'Manitowish'),(4,4,4,'Mirabel','Thomazet',685422769,'Sunbrook'),(5,5,5,'Gretel','Lay',312918671,'Arapahoe'),(6,6,6,'Isobel','Charte',241931478,'Mallard'),(7,7,7,'Karel','Scimone',540585681,'Bunting'),(8,8,8,'Osgood','Linge',878601141,'Mallory'),(9,9,9,'Marianne','Buske',582831894,'Walton'),(10,10,10,'Shell','Hamon',389382845,'Rockefeller'),(11,11,11,'Andrea','Conan',389382845,'St.Mallardfeller');
+/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `TR_log_nuevo_cliente` AFTER INSERT ON `cliente` FOR EACH ROW INSERT INTO log_nuevo_cliente VALUES (default,new.ID_cliente, new.ID_vehiculo, new.ID_Falla, new.Nombre, new.Apellido, new.Direccion, new.Contacto, NOW()) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
+--
+-- Table structure for table `descripcion`
+--
+
+DROP TABLE IF EXISTS `descripcion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `descripcion` (
+  `ID_desc` int NOT NULL,
+  `Diagnostico` text,
+  `Solucion` text,
+  PRIMARY KEY (`ID_desc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `descripcion`
+--
+
+LOCK TABLES `descripcion` WRITE;
+/*!40000 ALTER TABLE `descripcion` DISABLE KEYS */;
+INSERT INTO `descripcion` VALUES (5,'Se detecta que anglo de ruedas es incorrecto generando mayor desgaste en neumatico','Se realiza correcion de angulo a los establecidos por fabricante'),(43,'Falla en encendido de luces traseras','Se realiza cambio de luces traseras se confirma que funcionen correctamente'),(45,'Se ve que mangera de anticongelante se encontraba averiada','Se procede a generar cambio de mangera'),(48,'Se detecta filtro de aire deteriorado generando olor a combustible al momento de encender','Se procede a realizar cambio de filtro de aire'),(50,'Presenta bujia desgastada generando perdida de pontencia','Se realiza cambio de bujia, validando que ahora no se presenta perdida de potencia '),(51,'Presenta desgaste de frenos ','Se realiza cambio de frenos'),(60,'Vehiculo necesitaba cambio de aceite',' Se realiza cambio de acite'),(67,'Vehiculo presenta inclinacion hacia adelante cuando frena','se procede a realizar el cambio de la suspencion delantera'),(70,'Vehiculo genera vibraciones al momento de andar en carretera','Se procede a realizar balanceo de vehiculo para evitar el efecto de vibracion'),(75,'Se detecta fuga de cilindro maestro de freno',' Se realiza cambio cilindro maestro de freno'),(89,'Se detecta filtro de aire deteriorado generando olor a combustible al momento de encender','Se procede a realizar cambio de filtro de aire');
+/*!40000 ALTER TABLE `descripcion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `facturacion`
+--
+
+DROP TABLE IF EXISTS `facturacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `facturacion` (
+  `ID_facturacion` int NOT NULL AUTO_INCREMENT,
+  `ID_cliente` int DEFAULT NULL,
+  `ID_vehiculo` int DEFAULT NULL,
+  `ID_falla` int DEFAULT NULL,
+  `ID_mecanico` int DEFAULT NULL,
+  `ID_repuesto` int DEFAULT NULL,
+  `fecha_emision` date DEFAULT NULL,
+  `Costo_Reparacion` int DEFAULT NULL,
+  PRIMARY KEY (`ID_facturacion`),
+  KEY `FK_cliente` (`ID_cliente`),
+  KEY `FK_vehiculo` (`ID_vehiculo`),
+  KEY `FK_falla` (`ID_falla`),
+  KEY `FK_mecanico` (`ID_mecanico`),
+  KEY `FK_repuesto` (`ID_repuesto`),
+  CONSTRAINT `FK_cliente` FOREIGN KEY (`ID_cliente`) REFERENCES `cliente` (`ID_cliente`),
+  CONSTRAINT `FK_falla` FOREIGN KEY (`ID_falla`) REFERENCES `falla` (`ID_falla`),
+  CONSTRAINT `FK_mecanico` FOREIGN KEY (`ID_mecanico`) REFERENCES `mecanico` (`ID_mecanico`),
+  CONSTRAINT `FK_repuesto` FOREIGN KEY (`ID_repuesto`) REFERENCES `repuesto` (`ID_repuesto`),
+  CONSTRAINT `FK_vehiculo` FOREIGN KEY (`ID_vehiculo`) REFERENCES `vehiculo` (`ID_vehiculo`)
+) ENGINE=InnoDB AUTO_INCREMENT=372 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `facturacion`
+--
+
+LOCK TABLES `facturacion` WRITE;
+/*!40000 ALTER TABLE `facturacion` DISABLE KEYS */;
+INSERT INTO `facturacion` VALUES (361,1,1,1,501,1,'2021-04-28',103),(362,2,2,2,403,2,'2021-07-29',160),(363,3,3,3,670,3,'2021-06-23',50),(364,4,4,4,750,4,'2022-02-07',160),(365,5,5,5,501,5,'2022-02-11',155),(366,6,6,6,670,6,'2022-02-25',200),(367,7,7,7,501,7,'2022-02-24',80),(368,8,8,8,403,8,'2022-03-31',95),(369,9,9,9,750,9,'2022-03-12',65),(370,10,10,10,403,10,'2022-04-05',90),(371,11,11,11,670,11,'2022-04-05',90);
+/*!40000 ALTER TABLE `facturacion` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `TR_Log_Facturacion` AFTER UPDATE ON `facturacion` FOR EACH ROW INSERT INTO Log_Facturacion VALUES 
+(DEFAULT,old.fecha_emision,old.Costo_Reparacion,USER(), NOW(), new.fecha_emision, new.Costo_Reparacion) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `falla`
+--
+
+DROP TABLE IF EXISTS `falla`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `falla` (
+  `ID_falla` int NOT NULL,
+  `ID_mecanico` int NOT NULL,
+  `ID_desc` int NOT NULL,
+  `Categoria` varchar(30) DEFAULT NULL,
+  `Prioridad` varchar(30) DEFAULT NULL,
+  `Fecha_ingreso` date DEFAULT NULL,
+  `Fecha_termino` date DEFAULT NULL,
+  PRIMARY KEY (`ID_falla`),
+  KEY `FK_Falla_mecanico` (`ID_mecanico`),
+  KEY `FK_Falla_Desc` (`ID_desc`),
+  CONSTRAINT `FK_Falla_Desc` FOREIGN KEY (`ID_desc`) REFERENCES `descripcion` (`ID_desc`),
+  CONSTRAINT `FK_Falla_mecanico` FOREIGN KEY (`ID_mecanico`) REFERENCES `mecanico` (`ID_mecanico`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `falla`
+--
+
+LOCK TABLES `falla` WRITE;
+/*!40000 ALTER TABLE `falla` DISABLE KEYS */;
+INSERT INTO `falla` VALUES (1,501,51,'Frenos','Alta','2021-04-20','2021-04-28'),(2,403,43,'Luces','Media-Baja','2021-07-28','2021-08-02'),(3,670,60,'Aceite','Alta','2021-06-22','2021-06-23'),(4,750,75,'Frenos','Alta','2022-02-02','2022-02-07'),(5,501,50,'Bujia','Baja','2022-02-06','2022-02-10'),(6,670,67,'Suspencion','Alta','2022-02-15','2022-02-25'),(7,501,5,'Alineacion','Media-Baja','2022-02-22','2022-02-24'),(8,403,45,'Fuga','Media-Alta','2022-03-22','2022-03-30'),(9,750,70,'llanta','Baja','2022-03-09','2022-03-12'),(10,403,48,'Fuga','Media-Baja','2022-03-28','2022-04-04'),(11,670,89,'Fuga','Media-Baja','2022-03-28','2022-04-03');
+/*!40000 ALTER TABLE `falla` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `log_facturacion`
+--
+
+DROP TABLE IF EXISTS `log_facturacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log_facturacion` (
+  `ID_log_Facturacion` int NOT NULL AUTO_INCREMENT,
+  `fecha_emision_anterior` date DEFAULT NULL,
+  `Costo_anterior` int NOT NULL,
+  `usuario` varchar(60) DEFAULT NULL,
+  `fecha_hora` datetime DEFAULT NULL,
+  `Nueva_fecha_emision` date DEFAULT NULL,
+  `NuevoCosto` int DEFAULT NULL,
+  PRIMARY KEY (`ID_log_Facturacion`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log_facturacion`
+--
+
+LOCK TABLES `log_facturacion` WRITE;
+/*!40000 ALTER TABLE `log_facturacion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log_facturacion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `log_nuevo_cliente`
+--
+
+DROP TABLE IF EXISTS `log_nuevo_cliente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log_nuevo_cliente` (
+  `ID_log_nuevo_cliente` int NOT NULL AUTO_INCREMENT,
+  `ID_cliente` int NOT NULL,
+  `ID_vehiculo` int DEFAULT NULL,
+  `ID_Falla` int DEFAULT NULL,
+  `Nombre` varchar(30) DEFAULT NULL,
+  `Apellido` varchar(30) DEFAULT NULL,
+  `Direccion` varchar(30) DEFAULT NULL,
+  `Contacto` int DEFAULT NULL,
+  `Fecha` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID_log_nuevo_cliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log_nuevo_cliente`
+--
+
+LOCK TABLES `log_nuevo_cliente` WRITE;
+/*!40000 ALTER TABLE `log_nuevo_cliente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log_nuevo_cliente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mecanico`
+--
+
+DROP TABLE IF EXISTS `mecanico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mecanico` (
+  `ID_mecanico` int NOT NULL,
+  `ID_repuesto` int DEFAULT NULL,
+  `Nombre` varchar(30) DEFAULT NULL,
+  `Apellido` varchar(30) DEFAULT NULL,
+  `Edad` int DEFAULT NULL,
+  `Contacto` int DEFAULT NULL,
+  `Direccion` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`ID_mecanico`),
+  KEY `FK_repuesto_mecanico` (`ID_repuesto`),
+  CONSTRAINT `FK_repuesto_mecanico` FOREIGN KEY (`ID_repuesto`) REFERENCES `repuesto` (`ID_repuesto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mecanico`
+--
+
+LOCK TABLES `mecanico` WRITE;
+/*!40000 ALTER TABLE `mecanico` DISABLE KEYS */;
+INSERT INTO `mecanico` VALUES (403,2,'Florentino','Millones',28,532332870,'6827 Menomonie Circle'),(501,1,'Max','Vermilion',30,746434064,'51584 Roxbury Circle'),(670,3,'Ivan','Blanco',33,810563902,'271 Hanover Circle'),(750,4,'George','Thomson',37,570450124,'348 Declaration Center');
+/*!40000 ALTER TABLE `mecanico` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `repuesto`
+--
+
+DROP TABLE IF EXISTS `repuesto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `repuesto` (
+  `ID_repuesto` int NOT NULL,
+  `Repuesto` varchar(30) DEFAULT 'No es necesario',
+  `Cantidad` int DEFAULT '0',
+  `Proveedor` varchar(40) DEFAULT 'Sin informacion',
+  `fecha_uso` date DEFAULT NULL,
+  PRIMARY KEY (`ID_repuesto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `repuesto`
+--
+
+LOCK TABLES `repuesto` WRITE;
+/*!40000 ALTER TABLE `repuesto` DISABLE KEYS */;
+INSERT INTO `repuesto` VALUES (1,'Frenos',2,'Autopartes sol','2021-04-23'),(2,'Ampolletas Led',3,'Refax S.A','2021-07-29'),(3,'Aceite',1,'Autoplanet','2021-06-23'),(4,'Cilindro maestro de frenos',1,'Refax S.A','2021-05-15'),(5,'Bujia',1,'Autoplanet','2021-03-01'),(6,'Suspencion',2,'Autoplanet','2021-04-15'),(7,'No requerido',NULL,'Sin informacion',NULL),(8,'Manguera para anticongelante',1,'Autoplanet','2021-09-06'),(9,'No Requerido',NULL,'Sin informacion',NULL),(10,'Filtro de aire',1,'kaufparts','2021-03-29'),(11,'Filtro de aire',1,'kaufparts','2021-03-29');
+/*!40000 ALTER TABLE `repuesto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vehiculo`
+--
+
+DROP TABLE IF EXISTS `vehiculo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vehiculo` (
+  `ID_vehiculo` int NOT NULL,
+  `Modelo` varchar(30) DEFAULT NULL,
+  `Marca` varchar(30) DEFAULT NULL,
+  `Color` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`ID_vehiculo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vehiculo`
+--
+
+LOCK TABLES `vehiculo` WRITE;
+/*!40000 ALTER TABLE `vehiculo` DISABLE KEYS */;
+INSERT INTO `vehiculo` VALUES (1,'XC70','Volvo','Indigo'),(2,'A6','Audi','Khaki'),(3,'Protege','Mazda','Crimson'),(4,'RS 5 Coupe','Audi','Goldenrod'),(5,'A6','Audi','Purple'),(6,'Escalade EXT','Cadillac','Pink'),(7,'Roadster','Tesla','Crimson'),(8,'228','Maserati','Khaki'),(9,'RX-8','Mazda','Red'),(10,'SL-Class','Mercedes-Benz','Indigo'),(11,'A8','Audi','Pink');
+/*!40000 ALTER TABLE `vehiculo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `vw_cantidad_cliente`
+--
+
+DROP TABLE IF EXISTS `vw_cantidad_cliente`;
+/*!50001 DROP VIEW IF EXISTS `vw_cantidad_cliente`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_cantidad_cliente` AS SELECT 
+ 1 AS `Clientes por`,
+ 1 AS `Fecha generada la factura`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `vw_cliente_marca`
+--
+
+DROP TABLE IF EXISTS `vw_cliente_marca`;
+/*!50001 DROP VIEW IF EXISTS `vw_cliente_marca`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_cliente_marca` AS SELECT 
+ 1 AS `N_Cliente`,
+ 1 AS `Nombre`,
+ 1 AS `Dato vehiculo`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `vw_cliente_vehiculo`
+--
+
+DROP TABLE IF EXISTS `vw_cliente_vehiculo`;
+/*!50001 DROP VIEW IF EXISTS `vw_cliente_vehiculo`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_cliente_vehiculo` AS SELECT 
+ 1 AS `N_Cliente`,
+ 1 AS `Nombre`,
+ 1 AS `Contacto`,
+ 1 AS `Marca`,
+ 1 AS `Modelo`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `vw_facturas_bajas`
+--
+
+DROP TABLE IF EXISTS `vw_facturas_bajas`;
+/*!50001 DROP VIEW IF EXISTS `vw_facturas_bajas`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_facturas_bajas` AS SELECT 
+ 1 AS `factura`,
+ 1 AS `N°Cliente`,
+ 1 AS `Nombre`,
+ 1 AS `Costo`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `vw_revicion_mecanico`
+--
+
+DROP TABLE IF EXISTS `vw_revicion_mecanico`;
+/*!50001 DROP VIEW IF EXISTS `vw_revicion_mecanico`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_revicion_mecanico` AS SELECT 
+ 1 AS `N_vehiculo`,
+ 1 AS `modelo`,
+ 1 AS `marca`,
+ 1 AS `N_Mecanico`,
+ 1 AS `Nombre Macanico`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping routines for database 'taller_mecanico'
+--
+/*!50003 DROP FUNCTION IF EXISTS `f_Cantidad_Clientes` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `f_Cantidad_Clientes`() RETURNS int
+    READS SQL DATA
+BEGIN
+	DECLARE total INT ;
+	SELECT COUNT(ID_Cliente) INTO total FROM cliente;
+	RETURN total;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `F_facturacion_generada` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `F_facturacion_generada`(p_factura VARCHAR(50)) RETURNS varchar(50) CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+	DECLARE N_Factura VARCHAR(50);
+
+	DECLARE info VARCHAR(50);
+		## Para indicar que debe ser igual el ID_Facturacion a parametro ingresado
+		SELECT ID_Facturacion FROM facturacion
+        WHERE ID_facturacion = p_factura
+        INTO N_factura ;
+        
+	IF (N_Factura = p_factura) THEN
+		SET info = N_Factura;
+        
+	ELSE 
+		SET info = 'Factura no existe';
+	END IF;
+    
+	RETURN info ;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SP_DEL_Data_Vehiculo` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DEL_Data_Vehiculo`(P_Delete VARCHAR(20))
+    MODIFIES SQL DATA
+BEGIN
+	SET @Exp = 'select "Registro ingresado no existe" as Error;';
+
+	SET @del = (P_Delete);
+    
+    ## Indico donde esta la informacion que debe eliminar 
+IF @del = (P_Delete) then
+	DELETE FROM taller_mecanico.vehiculo WHERE (ID_vehiculo = @del);
+    
+	## Validar que informacion fue eliminada
+	(Select * from vehiculo);
+    
+ ##En caso de que intente borrar un registro que no exista que arroje un mensaje 
+ELSE
+    PREPARE FALLA FROM @Exp;
+    EXECUTE FALLA;
+	DEALLOCATE PREPARE FALLA;
+    
+ END IF;
+
+End ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SP_Insert_Data_Vehiculo` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_Insert_Data_Vehiculo`(IN p_ID_Vehiculo INT,p_Modelo VARCHAR(50),p_Marca VARCHAR (50),p_Color VARCHAR(50))
+    MODIFIES SQL DATA
+Begin
+	## Insertar informacion en tabla VEHICULO
+	insert into vehiculo (ID_vehiculo, marca, modelo, color) values(p_ID_Vehiculo,p_Modelo,p_Marca,p_Color);
+    (Select * from vehiculo);
+    SET @LOG = 'Select "Ingresado correctamente" as Registro;';
+    
+    prepare Regis from @LOG;
+	execute Regis;
+	deallocate prepare Regis;
+End ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Final view structure for view `vw_cantidad_cliente`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_cantidad_cliente`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_cantidad_cliente` AS select count('ID_clienteID_vehiculo') AS `Clientes por`,`facturacion`.`fecha_emision` AS `Fecha generada la factura` from `facturacion` where (year(`facturacion`.`fecha_emision`) = 2022) group by `facturacion`.`fecha_emision` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `vw_cliente_marca`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_cliente_marca`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_cliente_marca` AS select `cliente`.`ID_cliente` AS `N_Cliente`,concat(`cliente`.`Nombre`,' ',`cliente`.`Apellido`) AS `Nombre`,concat(`car`.`Marca`,' ',`car`.`Modelo`) AS `Dato vehiculo` from (`cliente` join `vehiculo` `car` on((`cliente`.`ID_vehiculo` = `car`.`ID_vehiculo`))) where (`car`.`Marca` = 'Mazda') */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `vw_cliente_vehiculo`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_cliente_vehiculo`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_cliente_vehiculo` AS select `cliente`.`ID_cliente` AS `N_Cliente`,concat(`cliente`.`Nombre`,' ',`cliente`.`Apellido`) AS `Nombre`,`cliente`.`Contacto` AS `Contacto`,`vehiculo`.`Marca` AS `Marca`,`vehiculo`.`Modelo` AS `Modelo` from (`cliente` join `vehiculo` on((`cliente`.`ID_cliente` = `vehiculo`.`ID_vehiculo`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `vw_facturas_bajas`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_facturas_bajas`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_facturas_bajas` AS select `f`.`ID_facturacion` AS `factura`,`c`.`ID_cliente` AS `N°Cliente`,concat(`c`.`Nombre`,' ',`c`.`Apellido`) AS `Nombre`,`f`.`Costo_Reparacion` AS `Costo` from (`facturacion` `f` join `cliente` `c` on((`f`.`ID_cliente` = `c`.`ID_cliente`))) where (`f`.`Costo_Reparacion` < 100) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `vw_revicion_mecanico`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_revicion_mecanico`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_revicion_mecanico` AS select `f`.`ID_vehiculo` AS `N_vehiculo`,`v`.`Modelo` AS `modelo`,`v`.`Marca` AS `marca`,`f`.`ID_mecanico` AS `N_Mecanico`,concat(`m`.`Nombre`,' ',`m`.`Apellido`) AS `Nombre Macanico` from ((`vehiculo` `v` left join `facturacion` `f` on((`f`.`ID_vehiculo` = `v`.`ID_vehiculo`))) left join `mecanico` `m` on((`f`.`ID_mecanico` = `m`.`ID_mecanico`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-05-29 15:52:52
