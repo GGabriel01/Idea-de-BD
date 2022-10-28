@@ -1,14 +1,9 @@
 
 /*
-Curso y comisión: SQL – 27810
-Docente: Daniela Blanco
-Tutor: Anderson Ocaña
-Alumno: Gabriel Gutiérrez
+
+By:  Gabriel Gutiérrez
 
 */
-
-
-
 
 
 CREATE DATABASE  IF NOT EXISTS `taller_mecanico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
